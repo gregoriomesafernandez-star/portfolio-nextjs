@@ -8,6 +8,13 @@ export default function Home() {
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
 
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    message: "",
+  });
+
+  //Funciones
   useEffect(() => {
     const handleScroll = () => {
       setScrolled(window.scrollY > 20);
@@ -294,19 +301,23 @@ export default function Home() {
           <div className="grid lg:grid-cols-2 gap-10">
 
             {/* Formulario */}
-            <div className="bg-slate-800 p-8 rounded-3xl shadow-lg">
+            <form action="https://formspree.io/f/xnjyybkz" method="POST" className="bg-slate-800 p-8 rounded-3xl shadow-lg">
 
               <div className="grid md:grid-cols-2 gap-4 mb-4">
 
                 <input
                   type="text"
+                  required
                   placeholder="Nombre"
+                  name="name"
                   className="w-full px-4 py-4 rounded-xl bg-slate-900 border border-slate-700 focus:outline-none focus:border-blue-500 transition duration-500"
                 />
 
                 <input
                   type="email"
+                  required
                   placeholder="Email"
+                  name="email"
                   className="w-full px-4 py-4 rounded-xl bg-slate-900 border border-slate-700 focus:outline-none focus:border-blue-500 transition duration-500"
                 />
 
@@ -314,17 +325,20 @@ export default function Home() {
 
               <textarea
                 rows={8}
+                required
                 placeholder="Escribe tu mensaje..."
+                name="message"
                 className="w-full px-4 py-4 rounded-xl bg-slate-900 border border-slate-700 focus:outline-none focus:border-blue-500 resize-none transition duration-500"
               ></textarea>
 
               <button
+                type="submit"
                 className="w-full mt-6 bg-blue-600 hover:bg-blue-700 py-4 rounded-xl font-semibold text-lg transition-all"
               >
                 Enviar mensaje
               </button>
 
-            </div>
+            </form>
 
             {/* Información */}
             <div className="bg-slate-800 p-8 rounded-3xl shadow-lg">
@@ -341,10 +355,10 @@ export default function Home() {
                   </p>
 
                   <a
-                    href="mailto:gregoriojmesa@gmail.com"
+                    href="mailto:gregorio.mesafernandez@gmail.com"
                     className="text-slate-300 hover:text-white"
                   >
-                    gregoriojmesa@gmail.com
+                    gregorio.mesafernandez@gmail.com
                   </a>
                 </div>
 
@@ -417,7 +431,7 @@ export default function Home() {
             <div className="flex gap-4">
 
               <a
-                href="https://github.com/TU-USUARIO"
+                href="https://github.com/gregoriomesafernandez-star"
                 target="_blank"
                 className="w-11 h-11 flex items-center justify-center rounded-full bg-slate-800 hover:bg-blue-600 transition-all"
               >
@@ -425,7 +439,7 @@ export default function Home() {
               </a>
 
               <a
-                href="https://github.com/gregoriomesafernandez-star"
+                href="#"
                 target="_blank"
                 className="w-11 h-11 flex items-center justify-center rounded-full bg-slate-800 hover:bg-blue-600 transition-all"
               >
