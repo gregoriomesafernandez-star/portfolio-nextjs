@@ -358,7 +358,7 @@ export default function Home() {
                     target="_blank"
                     className="text-slate-300 hover:text-white"
                   >
-                    github.com/TU-USUARIO
+                    github.com/gregoriomesafernandez-star
                   </a>
                 </div>
 
@@ -382,7 +382,7 @@ export default function Home() {
                   </p>
 
                   <p className="text-slate-300">
-                    Tenerife, España
+                    Tenerife, Islas Canarias, España
                   </p>
                 </div>
 
@@ -445,7 +445,7 @@ export default function Home() {
 
         </div>
       </footer>
-      
+
     </main>
   );
 }
