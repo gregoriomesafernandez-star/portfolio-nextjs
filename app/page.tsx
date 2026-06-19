@@ -279,6 +279,21 @@ export default function Home() {
               ]}
               github="https://github.com/gregoriomesafernandez-star/cars-api-laravel"
             />
+
+            <ProjectCard
+              title="Projects API (Node.js + MongoDB)"
+              description="API REST desarrollada con Node.js, Express y MongoDB que incluye operaciones CRUD completas, gestión de imágenes con Multer y almacenamiento de datos mediante Mongoose."
+              image="/projects/api-node.png"
+              technologies={[
+                "Node.js",
+                "Express",
+                "MongoDB",
+                "Mongoose",
+                "Multer",
+                "REST API"
+              ]}
+              github="https://github.com/gregoriomesafernandez-star/projects-api-node-mongodb"
+            />
           </div>
         </div>
       </section>
@@ -308,7 +323,7 @@ export default function Home() {
                 <input
                   type="text"
                   required
-                  placeholder="Nombre"
+                  placeholder="Tu nombre"
                   name="name"
                   className="w-full px-4 py-4 rounded-xl bg-slate-900 border border-slate-700 focus:outline-none focus:border-blue-500 transition duration-500"
                 />
@@ -316,7 +331,7 @@ export default function Home() {
                 <input
                   type="email"
                   required
-                  placeholder="Email"
+                  placeholder="tucorreo@gmail.com"
                   name="email"
                   className="w-full px-4 py-4 rounded-xl bg-slate-900 border border-slate-700 focus:outline-none focus:border-blue-500 transition duration-500"
                 />
@@ -326,7 +341,7 @@ export default function Home() {
               <textarea
                 rows={8}
                 required
-                placeholder="Escribe tu mensaje..."
+                placeholder="Cuéntame sobre tu proyecto..."
                 name="message"
                 className="w-full px-4 py-4 rounded-xl bg-slate-900 border border-slate-700 focus:outline-none focus:border-blue-500 resize-none transition duration-500"
               ></textarea>
