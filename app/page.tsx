@@ -163,8 +163,10 @@ export default function Home() {
               <span className="font-semibold text-blue-600"> Laravel</span>, 
               <span className="font-semibold text-blue-600"> Symfony</span>, 
               <span className="font-semibold text-blue-600"> Angular</span>, 
-              <span className="font-semibold text-blue-600"> PHP </span> 
-              y <span className="font-semibold text-blue-600">MySQL</span>, desarrollando 
+              <span className="font-semibold text-blue-600"> PHP</span>,
+              <span className="font-semibold text-blue-600"> Node.js</span>,
+              <span className="font-semibold text-blue-600"> MySQL</span>
+              y <span className="font-semibold text-blue-600">MongoDB</span>, desarrollando 
               aplicaciones web, APIs REST, sistemas de autenticación y bases de datos.
               Actualmente continúo ampliando mis conocimientos y manteniéndome al día con las tecnologías modernas de desarrollo web.
             </p>
