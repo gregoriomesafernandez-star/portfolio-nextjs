@@ -268,7 +268,7 @@ export default function Home() {
             />
 
             <ProjectCard
-              title="Cars API Laravel"
+              title="API de Gestión de Vehículos"
               description="API REST desarrollada con Laravel que incluye autenticación JWT, validación de datos y un sistema CRUD completo para la gestión de vehículos."
               image="/projects/image.png"
               technologies={[
@@ -283,8 +283,8 @@ export default function Home() {
             />
 
             <ProjectCard
-              title="Projects API (Node.js + MongoDB)"
-              description="API REST desarrollada con Node.js, Express y MongoDB que incluye operaciones CRUD completas, gestión de imágenes con Multer y almacenamiento de datos mediante Mongoose."
+              title="API de Gestión de Proyectos"
+              description="API REST desarrollada con Node.js, Express y MongoDB que incluye operaciones CRUD, gestión de imágenes con Multer y almacenamiento de datos con Mongoose."
               image="/projects/api-node.png"
               technologies={[
                 "Node.js",
