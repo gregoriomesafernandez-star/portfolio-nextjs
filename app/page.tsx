@@ -187,7 +187,7 @@ export default function Home() {
               <h3 className="text-2xl font-bold mb-6 text-blue-600">Frontend</h3>
 
               <div className="flex flex-wrap gap-3">
-                {["HTML", "CSS", "JavaScript", "TypeScript", "Angular", "React", "Vue.js", "Next.js", "Tailwind CSS", "Bootstrap"].map((skill) => (
+                {["HTML", "CSS", "JavaScript", "TypeScript", "Angular", "Next.js", "React", "Vue.js", "Tailwind CSS", "Bootstrap"].map((skill) => (
                   <span key={skill} className="px-4 py-2 bg-blue-100 text-blue-700 rounded-full font-medium">
                     {skill}
                   </span>
@@ -200,7 +200,7 @@ export default function Home() {
               <h3 className="text-2xl font-bold mb-6 text-emerald-600">Backend</h3>
 
               <div className="flex flex-wrap gap-3">
-                {["PHP", "Laravel", "Symfony", "Node.js", "REST API", "JWT", "MySQL", "MongoDB"].map((skill) => (
+                {["PHP", "Laravel", "Symfony", "Node.js", "Express.js", "REST API", "JWT", "MySQL", "MongoDB", "Mongoose"].map((skill) => (
                   <span key={skill} className="px-4 py-2 bg-emerald-100 text-emerald-700 rounded-full font-medium">
                     {skill}
                   </span>
