@@ -154,8 +154,7 @@ export default function Home() {
             
             <p className="mt-10">
               Cuento con formación en Desarrollo de Aplicaciones Web (DAW) y Administración de Sistemas Informáticos en Red (ASIR). 
-              En los últimos años he retomado el desarrollo de software de forma activa, ampliando mis conocimientos mediante proyectos 
-              personales y aprendizaje continuo.
+              Tras varios años de experiencia en otros sectores, he decidido enfocar mi carrera en el desarrollo de software, una disciplina que he estudiado y practicado de forma constante mediante proyectos propios.
             </p>
 
             <p className="mt-10"> 
@@ -399,11 +398,11 @@ export default function Home() {
                   </p>
 
                   <a
-                    href="https://linkedin.com/in/TU-PERFIL"
+                    href="https://www.linkedin.com/in/gregorio-mesa-fernandez/"
                     target="_blank"
                     className="text-slate-300 hover:text-white"
                   >
-                    linkedin.com/in/TU-PERFIL
+                    https://www.linkedin.com/in/gregorio-mesa-fernandez/
                   </a>
                 </div>
 
@@ -456,18 +455,11 @@ export default function Home() {
               </a>
 
               <a
-                href="#"
+                href="www.linkedin.com/in/gregorio-mesa-fernandez"
                 target="_blank"
                 className="w-11 h-11 flex items-center justify-center rounded-full bg-slate-800 hover:bg-blue-600 transition-all"
               >
                 🔗
-              </a>
-
-              <a
-                href="mailto:gregoriojmesa@gmail.com"
-                className="w-11 h-11 flex items-center justify-center rounded-full bg-slate-800 hover:bg-blue-600 transition-all"
-              >
-                📧
               </a>
 
             </div>
