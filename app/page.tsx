@@ -164,7 +164,7 @@ export default function Home() {
               <span className="font-semibold text-blue-600"> Angular</span>, 
               <span className="font-semibold text-blue-600"> PHP</span>,
               <span className="font-semibold text-blue-600"> Node.js</span>,
-              <span className="font-semibold text-blue-600"> MySQL</span>
+              <span className="font-semibold text-blue-600"> MySQL </span>
               y <span className="font-semibold text-blue-600">MongoDB</span>, desarrollando 
               aplicaciones web, APIs REST, sistemas de autenticación y bases de datos.
               Actualmente continúo ampliando mis conocimientos y manteniéndome al día con las tecnologías modernas de desarrollo web.
@@ -426,7 +426,7 @@ export default function Home() {
 
       {/* Footer */}
       <footer className="bg-slate-950 text-slate-400 border-t border-slate-800">
-        <div className="max-w-6xl mx-auto px-6 py-8">
+        <div className="max-w-6xl mx-auto px-6 py-5">
 
           <div className="flex flex-col md:flex-row justify-between items-center gap-6">
 
@@ -438,31 +438,11 @@ export default function Home() {
             </div>
 
             {/* Copyright */}
-            <p className="text-center">
+            <p className="text-center text-sm">
               © {new Date().getFullYear()} Gregorio José Mesa Fernández.
               Todos los derechos reservados.
             </p>
 
-            {/* Redes */}
-            <div className="flex gap-4">
-
-              <a
-                href="https://github.com/gregoriomesafernandez-star"
-                target="_blank"
-                className="w-11 h-11 flex items-center justify-center rounded-full bg-slate-800 hover:bg-blue-600 transition-all"
-              >
-                💻
-              </a>
-
-              <a
-                href="www.linkedin.com/in/gregorio-mesa-fernandez"
-                target="_blank"
-                className="w-11 h-11 flex items-center justify-center rounded-full bg-slate-800 hover:bg-blue-600 transition-all"
-              >
-                🔗
-              </a>
-
-            </div>
 
           </div>
 
