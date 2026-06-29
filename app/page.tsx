@@ -295,6 +295,22 @@ export default function Home() {
               ]}
               github="https://github.com/gregoriomesafernandez-star/projects-api-node-mongodb"
             />
+
+            <ProjectCard
+              title="Gestor de Tareas"
+              description="Aplicación de gestión de tareas con React y Supabase. Incluye autenticación, gestión de proyectos, organización de tareas por columnas, drag and drop y seguridad con RLS."
+              image="/projects/trabajo-diario.PNG"
+              technologies={[
+                "React",
+                "JavaScript",
+                "Supabase",
+                "PostgreSQL",
+                "Vite",
+                "CSS3"
+              ]}
+              github="https://github.com/gregoriomesafernandez-star/daily-task-manager-react"
+              demo="https://daily-task-manager-react-five.vercel.app/"
+            />
           </div>
         </div>
       </section>
