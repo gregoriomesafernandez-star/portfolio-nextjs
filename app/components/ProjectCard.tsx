@@ -1,81 +1,240 @@
 // app/components/ProjectCard.tsx
+
 import Link from 'next/link';
 import Image from 'next/image';
 
 interface ProjectCardProps {
   title: string;
   description: string;
+  challenge?: string;
+  solution?: string;
   image: string;
   technologies: string[];
   github?: string;
+  githubFrontend?: string;
+  githubBackend?: string;
   demo?: string;
+  reverse?: boolean;
 }
 
 export default function ProjectCard({
   title,
   description,
+  challenge,
+  solution,
   image,
   technologies,
   github,
-  demo
+  githubFrontend,
+  githubBackend,
+  demo,
+  reverse = false,
 }: ProjectCardProps) {
   return (
-    <div className="bg-white rounded-3xl overflow-hidden shadow-sm card-hover group">
-      {/* Imagen del proyecto */}
-      <div className="relative h-44 bg-gray-200">
-        <Image 
-          src={image} 
+    <article
+      className={`grid gap-10 items-center mb-52 max-
+                  ${reverse ? 'lg:grid-cols-[0.8fr_1.2fr]' : 'lg:grid-cols-[1.2fr_0.8fr]'}
+      `}>
+
+      {/* Imagen */}
+      <div className={`relative w-full aspect-video overflow-hidden rounded-2xl lg:row-start-1
+                       ${reverse ? 'lg:col-start-2' : 'lg:col-start-1'}
+      `}>
+        <Image
+          src={image}
           alt={title}
-          fill 
-          className="object-contain group-hover:scale-105 transition-transform duration-500"
+
+          fill
+          className="object-cover transition-transform duration-700 hover:scale-105"
         />
       </div>
 
-      {/* Contenido */}
-      <div className="p-8">
-        <h3 className="text-2xl font-semibold mb-3 text-gray-800 line-clamp-2">
+
+      {/* Información */}
+      <div className={`lg:row-start-1
+                    ${reverse ? 'lg:col-start-1' : 'lg:col-start-2'}
+      `}>
+
+        {/* Título */}
+        <h3 className="font-nav tracking-wider text-4xl font-bold text-slate-800 dark:text-gray-300 mb-8 leading-tight">
           {title}
         </h3>
-        
-        <p className="text-gray-600 mb-6 line-clamp-5">
-          {description}
-        </p>
+
+
+        {/* Desafío */}
+        {challenge && (
+          <div className="border-l-2 border-cyan-500/20 pl-5 mb-6">
+
+            <h4 className="text-xs font-bold tracking-widest uppercase text-cyan-600 mb-2">
+              El desafío
+            </h4>
+
+            <p className="text-gray-600 text-lg leading-relaxed">
+              {challenge}
+            </p>
+
+          </div>
+        )}
+
+
+        {/* Solución */}
+        {solution && (
+          <div className="border-l-2 border-cyan-500/20 pl-5 mb-7">
+
+            <h4 className="text-xs font-bold tracking-widest uppercase text-cyan-600 mb-2">
+              La solución
+            </h4>
+
+            <p className="text-gray-600 text-lg leading-relaxed">
+              {solution}
+            </p>
+
+          </div>
+        )}
+
+
+        {/* Descripción */}
+        {!challenge && !solution && (
+          <p className="text-slate-700 dark:text-gray-400 text-lg leading-relaxed mb-7">
+            {description}
+          </p>
+        )}
+
 
         {/* Tecnologías */}
         <div className="flex flex-wrap gap-2 mb-8">
+
           {technologies.map((tech, index) => (
-            <span 
+            <span
               key={index}
-              className="text-xs font-medium bg-gray-100 text-gray-700 px-4 py-1.5 rounded-full"
+              className="
+                px-3
+                py-1.5
+                rounded-md
+                bg-cyan-500/5
+                border
+                border-cyan-500/15
+                text-cyan-700
+                text-xs
+                font-medium
+              "
             >
               {tech}
             </span>
           ))}
+
         </div>
 
+
         {/* Botones */}
-        <div className="flex gap-3">
-          {github && (
-            <Link 
-              href={github}
-              target="_blank"
-              className="flex-1 text-center border border-gray-300 hover:border-gray-400 py-3 rounded-2xl text-sm font-medium transition-all"
-            >
-              Ver código
-            </Link>
+        <div className="flex flex-wrap gap-4">
+
+          {/* Proyecto con frontend + backend */}
+          {githubFrontend && githubBackend ? (
+            <>
+              <Link
+                href={githubFrontend}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="
+                  px-7
+                  py-3
+                  rounded-full
+                  bg-cyan-600
+                  text-white
+                  text-sm
+                  font-semibold
+                  tracking-widest
+                  transition-all
+                  duration-300
+                  hover:bg-cyan-700
+                  hover:shadow-md
+                  hover:shadow-cyan-500/20
+                "
+              >
+                CÓDIGO FRONTEND
+              </Link>
+
+              <Link
+                href={githubBackend}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="
+                  px-7
+                  py-3
+                  rounded-full
+                  bg-cyan-600
+                  text-white
+                  text-sm
+                  font-semibold
+                  tracking-widest
+                  transition-all
+                  duration-300
+                  hover:bg-cyan-700
+                  hover:shadow-md
+                  hover:shadow-cyan-500/20
+                "
+              >
+                CÓDIGO BACKEND
+              </Link>
+            </>
+          ) : (
+            /* Proyecto con un solo repositorio */
+            github && (
+              <Link
+                href={github}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="
+                  px-7
+                  py-3
+                  rounded-full
+                  bg-cyan-600
+                  text-white
+                  text-sm
+                  font-semibold
+                  tracking-widest
+                  transition-all
+                  duration-300
+                  hover:bg-cyan-700
+                  hover:shadow-md
+                  hover:shadow-cyan-500/20
+                "
+              >
+                CÓDIGO
+              </Link>
+            )
           )}
-          
+
+          {/* Demo */}
           {demo && (
-            <Link 
+            <Link
               href={demo}
               target="_blank"
-              className="flex-1 text-center bg-blue-600 text-white py-3 rounded-2xl text-sm font-medium hover:bg-blue-700 transition-all"
+              rel="noopener noreferrer"
+              className="
+                px-7
+                py-3
+                rounded-full
+                bg-gray-100
+                text-gray-800
+                text-sm
+                font-semibold
+                tracking-widest
+                transition-all
+                duration-300
+                hover:bg-white
+                hover:shadow-md
+              "
             >
-              Ver demo
+              VER PROYECTO
             </Link>
           )}
+
         </div>
+
       </div>
-    </div>
+
+    </article>
   );
 }

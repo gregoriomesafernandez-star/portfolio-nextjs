@@ -1,65 +1,293 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import Link from "next/link";
 import ProjectCard from "./components/ProjectCard";
+import {Download, Mail, MapPin, Send, User, MessageSquare, Moon, Sun} from "lucide-react";
+
+import { FaGithub, FaLinkedin } from "react-icons/fa";
 
 export default function Home() {
+  // Variables
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
+  const [isVisible, setIsVisible] = useState(false);
+  const sobreMiRef = useRef(null);
+  const [darkMode, setDarkMode] = useState(true);
+  const [themeLoaded, setThemeLoaded] = useState(false);
 
-  const [formData, setFormData] = useState({
-    name: "",
-    email: "",
-    message: "",
-  });
+  // Funciones
 
-  //Funciones
+  //Recuperamos tema
   useEffect(() => {
+    const savedTheme = localStorage.getItem("theme");
+
+    if (savedTheme !== null) {
+      setDarkMode(savedTheme === "dark");
+    }
+
+    setThemeLoaded(true);
+  }, []);
+
+  //Modo claro/oscuro
+  useEffect(() => {
+    if (!themeLoaded) return;
+
+    document.documentElement.classList.toggle("dark", darkMode);
+
+    localStorage.setItem("theme", darkMode ? "dark" : "light");
+  }, [darkMode, themeLoaded]);
+
+  useEffect(() => {
+
+    // Detectar scroll del navbar
     const handleScroll = () => {
       setScrolled(window.scrollY > 20);
     };
 
     window.addEventListener("scroll", handleScroll);
 
+    // Detectar cuando "Sobre mí" entra en pantalla
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+          setIsVisible(entry.isIntersecting);
+      },
+      {
+        threshold: 0.3,
+      }
+    );
+
+    // Observamos la Referencia
+    if (sobreMiRef.current) {
+      observer.observe(sobreMiRef.current);
+    }
+
+    // Raton y particulas
+    const particles = document.querySelectorAll<HTMLElement>(
+      ".particle, .particle2, .particle3"
+    );
+
+    let mouseX = 0;
+    let mouseY = 0;
+    let animationFrame: number;
+
+    const handleMouseMove = (e: MouseEvent) => {
+      mouseX = e.clientX;
+      mouseY = e.clientY;
+    };
+
+    const animateParticles = () => {
+
+      particles.forEach((particle) => {
+
+        // Dimensiones y posición actuales de esta partícula
+        const rect = particle.getBoundingClientRect();
+
+        // Calculamos el centro exacto de cada particula
+        const particleX = rect.left + rect.width / 2;
+        const particleY = rect.top + rect.height / 2;
+
+        // Obtenemos a cuanto está cada particula del ratón
+        const dx = mouseX - particleX;
+        const dy = mouseY - particleY;
+
+        // Hacemos Pitagoras
+        const distance = Math.sqrt(dx * dx + dy * dy);
+
+        const attractionRadius = 120;
+
+        if (distance < attractionRadius) {
+          const strength = 1 - distance / attractionRadius;
+
+          // Movimiento hacia el ratón
+          const moveX = dx * strength * 0.15;
+          const moveY = dy * strength * 0.15;
+
+          particle.style.translate = `${moveX}px ${moveY}px`;
+          
+          // Tamaño
+          const scale = 1 + strength * 0.5;
+
+          particle.style.scale = `${scale}`;
+          
+          // Glow
+          const glow1 = 4 + strength * 4;
+          const glow2 = 10 + strength * 10;
+          const glow3 = strength * 40;
+          const glow4 = strength * 60;
+
+          particle.style.boxShadow = `
+            0 0 ${glow1}px #22D3EE,
+            0 0 ${glow2}px #22D3EE,
+            0 0 ${glow3}px #22D3EE,
+            0 0 ${glow4}px #22D3EE
+          `;
+
+        } else {
+
+          // Volver al estado normal
+          particle.style.translate = "0 0";
+          particle.style.scale = "1";
+
+          particle.style.boxShadow = `
+            0 0 5px #06B6D4,
+            0 0 10px #06B6D4,
+            0 0 18px rgba(8, 145, 178, 0.6)
+          `;
+        }
+      });
+
+      animationFrame = requestAnimationFrame(animateParticles);
+    };
+
+    window.addEventListener("mousemove", handleMouseMove);
+
+    animationFrame = requestAnimationFrame(animateParticles);
+
     return () => {
       window.removeEventListener("scroll", handleScroll);
+      observer.disconnect();
+      window.removeEventListener("mousemove", handleMouseMove);
+      cancelAnimationFrame(animationFrame);
     };
+
   }, []);
 
   return (
-    <main className="min-h-screen">
+    <main className="min-h-screen bg-[#E8E4D9] text-slate-900 dark:bg-slate-900 dark:text-white transition-colors duration-500">
 
       {/* Navbar */}
       <nav
-        className={`fixed top-0 left-0 w-full z-50 border-b transition-all duration-300 ${
+        className={`fixed top-0 left-0 w-full z-50  ${
           scrolled
-            ? "bg-white/70 backdrop-blur-lg border-white/20 shadow-sm"
-            : "bg-white border-gray-200"
+            ? "border-b bg-gradient-to-b from-[#F8F4EA] via-[#F8F4EA]/80 to-[#F8F4EA] dark:border-gray-800 dark:bg-gradient-to-b dark:from-slate-700 dark:via-slate-800/90 dark:to-slate-900 backdrop-blur-md shadow-xl"
+            
+            : "bg-gradient-to-b from-[#F8F4EA] via-[#F8F4EA]/80 to-[#F8F4EA] dark:bg-gradient-to-b dark:from-slate-700 dark:via-slate-800/80 dark:to-slate-900"
         }`}
       >
+
+        
         <div className="max-w-6xl mx-auto px-6 py-4 flex justify-between items-center">
           
-          <div className="text-2xl font-bold text-blue-600">
-            Gregorio J. Mesa
+          <div className="text-2xl font-bold dark:text-white">
+            G<span className="text-cyan-600 dark:text-blue-500">
+                M
+              </span>
           </div>
 
           {/* Menú desktop */}
-          <div className="hidden lg:flex gap-8 text-gray-700 font-medium">
-            <Link href="#sobre-mi" className="hover:text-blue-600 transition-colors">Sobre mí</Link>
-            <Link href="#habilidades" className="hover:text-blue-600 transition-colors">Habilidades</Link>
-            <Link href="#proyectos" className="hover:text-blue-600 transition-colors">Proyectos</Link>
-            <Link href="#contacto" className="hover:text-blue-600 transition-colors">Contacto</Link>
+          <div className="hidden lg:flex gap-8 dark:text-gray-200 text-sm">
+            <Link href="#sobre-mi" className="hover:text-cyan-700
+                                            dark:hover:text-cyan-500
+                                              font-nav
+                                              tracking-[0.18em]
+                                              transition-colors 
+                                              duration-300
+                                              relative
+                                              after:absolute
+                                              after:left-1/2
+                                              after:-bottom-1
+                                              after:h-[1px]
+                                              after:w-0
+                                              after:bg-cyan-600
+                                              dark:after:bg-cyan-400
+                                              after:transition-all
+                                              after:duration-300
+                                              after:-translate-x-1/2
+                                              hover:after:w-full">SOBRE MÍ</Link>
+            <Link href="#habilidades" className="hover:text-cyan-700
+                                            dark:hover:text-cyan-500 
+                                              font-nav
+                                              tracking-[0.18em]
+                                              transition-colors
+                                              duration-300
+                                              relative
+                                              after:absolute
+                                              after:left-1/2
+                                              after:-bottom-1
+                                              after:h-[1px]
+                                              after:w-0
+                                              after:bg-cyan-600
+                                              dark:after:bg-cyan-400
+                                              after:transition-all
+                                              after:duration-300
+                                              after:-translate-x-1/2
+                                              hover:after:w-full">HABILIDADES</Link>
+            <Link href="#proyectos" className="hover:text-cyan-700
+                                            dark:hover:text-cyan-500 font-nav
+                                              tracking-[0.18em]
+                                              transition-colors
+                                              duration-300
+                                              relative
+                                              after:absolute
+                                              after:left-1/2
+                                              after:-bottom-1
+                                              after:h-[1px]
+                                              after:w-0
+                                              after:bg-cyan-600
+                                              dark:after:bg-cyan-400
+                                              after:transition-all
+                                              after:duration-300
+                                              after:-translate-x-1/2
+                                              hover:after:w-full">PROYECTOS</Link>
+            <Link href="#contacto" className="hover:text-cyan-700
+                                            dark:hover:text-cyan-500 font-nav
+                                              tracking-[0.18em]
+                                              transition-colors 
+                                              duration-300
+                                              relative
+                                              after:absolute
+                                              after:left-1/2
+                                              after:-bottom-1
+                                              after:h-[1px]
+                                              after:w-0
+                                              after:bg-cyan-600
+                                              dark:after:bg-cyan-400
+                                              after:transition-all
+                                              after:duration-300
+                                              after:-translate-x-1/2
+                                              hover:after:w-full">CONTACTO</Link>
           </div>
+          
+          <div className="flex gap-4">
+            <button
+              onClick={() => setDarkMode(!darkMode)}
+              className="hidden lg:flex items-center justify-center w-10 h-10 rounded-full border 
+                       border-cyan-700
+                       dark:border-blue-700
+                       bg-blue-800/10
+                       dark:bg-blue-500/10 
+                       text-gray-600
+                       dark:text-gray-200/70
+                       hover:bg-blue-800/20
+                       dark:hover:bg-blue-500/20 
+                         transition-all 
+                         duration-300"
+              aria-label="Cambiar tema"
+            >
+              {darkMode ? (
+                <Sun className="w-5 h-5" />
+              ) : (
+                <Moon className="w-5 h-5" />
+              )}
+            </button>
 
-          {/* Botón CV desktop */}
-          <a 
-            href="/Gregorio-Mesa-CV.pdf"
-            download
-            className="hidden lg:inline-block bg-blue-600 text-white px-5 py-2.5 rounded-lg font-medium hover:bg-blue-700 transition-colors"
-          >
-            Descargar CV
-          </a>
+            {/* Botón CV desktop */}
+            
+            
+            <a 
+              href="/CV-Gregorio-Mesa-Fernandez2026.pdf"
+              download
+              className="hidden lg:flex items-center gap-2 border font-nav border-cyan-700 dark:border-blue-500 
+                         font-bold bg-blue-500/15 px-5 py-2 rounded-full text-xs 
+                         tracking-[0.15em] text-cyan-600 dark:text-blue-500 hover:bg-cyan-600 dark:hover:bg-blue-400 
+                         hover:text-white dark:hover:text-black transition-colors duration-300"
+            >
+              <Download className="w-4 h-4 " />
+              <span>DESCARGAR CV</span>
+            </a>
+          </div>
+          
 
           {/* Botón hamburguesa móvil */}
           <button
@@ -74,15 +302,15 @@ export default function Home() {
         {menuOpen && (
           <div className="lg:hidden bg-white/95 backdrop-blur-lg border-t border-gray-200 shadow-md">
             <div className="px-6 py-6 flex flex-col gap-5 text-gray-700 font-medium">
-              <Link href="#sobre-mi" onClick={() => setMenuOpen(false)}>Sobre mí</Link>
-              <Link href="#habilidades" onClick={() => setMenuOpen(false)}>Habilidades</Link>
-              <Link href="#proyectos" onClick={() => setMenuOpen(false)}>Proyectos</Link>
-              <Link href="#contacto" onClick={() => setMenuOpen(false)}>Contacto</Link>
+              <Link href="#sobre-mi" onClick={() => setMenuOpen(false)}>SOBRE MI</Link>
+              <Link href="#habilidades" onClick={() => setMenuOpen(false)}>HABILIDADES</Link>
+              <Link href="#proyectos" onClick={() => setMenuOpen(false)}>PROYECTOS</Link>
+              <Link href="#contacto" onClick={() => setMenuOpen(false)}>CONTACTO</Link>
 
               <a
                 href="/Gregorio-Mesa-CV.pdf"
                 download
-                className="bg-blue-600 text-white text-center px-5 py-3 rounded-lg font-medium hover:bg-blue-700 transition-colors"
+                className="bg-blue-600 text-center px-5 py-3 rounded-lg font-medium hover:bg-blue-700 transition-colors"
               >
                 Descargar CV
               </a>
@@ -92,33 +320,82 @@ export default function Home() {
       </nav>
 
       {/* Banner Section */}
-      <section className="relative overflow-hidden bg-gradient-to-br from-blue-600 via-blue-700 to-indigo-800 text-white pt-32 pb-28">
+      <section className="relative min-h-[800px] overflow-hidden text-white pt-40 pb-28">
         
-      {/* Luces decorativas */}
-        <div className="absolute top-0 left-0 w-96 h-96 bg-blue-300/20 rounded-full blur-3xl"></div>
-
-        <div className="absolute bottom-0 right-0 w-96 h-96 bg-yellow-300/10 rounded-full blur-3xl"></div>
+        {/* Partículas */}
+        <div className="absolute inset-0 pointer-events-none">
+          <span className={`${darkMode ? "particle3" : "particle3Light"} particle-1`}></span>
+          <span className={`${darkMode ? "particle2" : "particle2Light"} particle-2`}></span>
+          <span className={`${darkMode ? "particle" : "particleLight"} particle-3`}></span>
+          <span className={`${darkMode ? "particle2" : "particle2Light"} particle-4`}></span>
+          <span className={`${darkMode ? "particle" : "particleLight"} particle-5`}></span>
+          <span className={`${darkMode ? "particle3" : "particle3Light"} particle-6`}></span>
+          <span className={`${darkMode ? "particle" : "particleLight"} particle-7`}></span>
+          <span className={`${darkMode ? "particle2" : "particle2Light"} particle-8`}></span>
+          <span className={`${darkMode ? "particle2" : "particle2Light"} particle-9`}></span>
+          <span className={`${darkMode ? "particle" : "particleLight"} particle-10`}></span>
+          <span className={`${darkMode ? "particle2" : "particle2Light"} particle-11`}></span>
+          <span className={`${darkMode ? "particle" : "particleLight"} particle-12`}></span>
+          <span className={`${darkMode ? "particle" : "particleLight"} particle-13`}></span>
+          <span className={`${darkMode ? "particle" : "particleLight"} particle-14`}></span>
+          <span className={`${darkMode ? "particle2" : "particle2Light"} particle-15`}></span>
+          <span className={`${darkMode ? "particle" : "particleLight"} particle-16`}></span>
+        </div>
 
         {/* Contenido */}
-        <div className="relative max-w-5xl mx-auto px-6 text-center">
+        <div className="absolute left-28 top-1/2 -translate-y-1/2 max-w-5xl mx-auto px-6 text-center">
+          
+          <span className="
+            slide-in-left
+            inline-flex
+            items-center
+            gap-3
+            mb-6
+            px-5
+            py-2
+            rounded-full
+            bg-white/50
+            dark:bg-white/10
+            border
+            border-cyan-600
+            dark:border-white/20
+            text-sm
+            font-medium
+            text-gray-600
+            dark:text-gray-200
+          ">
+            <span className="
+              w-2
+              h-2
+              rounded-full
+              bg-cyan-600
+              dark:bg-[#22D3EE]
+              animate-[glow_2s_ease-in-out_infinite]
+              shrink-0
+            "></span>
 
-          <span className="inline-block mb-6 px-5 py-2 rounded-full bg-white/10 border border-white/20 text-sm font-medium text-blue-100">
             Disponible para nuevos proyectos
           </span>
-
-          <h1 className="text-5xl md:text-6xl font-bold mb-6">
-            Desarrollador Web  <span className="text-yellow-300">Full Stack</span>
+          
+          <h1 className="font-hero slide-in-left delay-1 font-semibold text-3xl md:text-5xl mb-6 text-gray-700 dark:text-white">
+            Gregorio José <span className="font-bold bg-gradient-to-r italic from-blue-600 to-cyan-500 dark:from-blue-500 dark:to-cyan-400 bg-clip-text text-transparent">
+                            Mesa Fernández
+                          </span>
           </h1>
-
-          <p className="max-w-2xl mx-auto text-lg md:text-xl text-blue-100 mb-10 leading-relaxed">
-            Apasionado por el desarrollo de software, el aprendizaje continuo
-            y la creación de soluciones digitales.
+          <h3 className="slide-in-left delay-1 text-5xl md:text-2xl font-bold mb-6 text-gray-700 dark:text-white">
+            Desarrollador Web <span className="bg-gradient-to-r from-blue-600 to-cyan-500 dark:from-blue-500 dark:to-cyan-400 bg-clip-text text-transparent">
+                                Full Stack
+                              </span>
+          </h3>
+        
+          <p className="slide-in-left font-texto delay-2 max-w-2xl mx-auto text-lg md:text-2xl text-slate-600 dark:text-blue-100 mb-10 leading-relaxed">
+            Enfocado en el desarrollo de software, el aprendizaje continuo y la creación de soluciones digitales.
           </p>
 
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+          <div className="slide-in-left delay-3 flex flex-col sm:flex-row gap-4 justify-center">
             <Link 
               href="#proyectos"
-              className="bg-white text-blue-700 font-semibold px-8 py-4 rounded-2xl hover:bg-yellow-300 hover:text-blue-900 transition-all text-lg shadow-lg"
+              className="bg-violet-600 text-white font-semibold px-8 py-4 rounded-2xl hover:bg-violet-500 hover:text-white transition-all text-lg shadow-lg"
             >
               Ver proyectos
             </Link>
@@ -126,38 +403,74 @@ export default function Home() {
             <Link 
               href="https://github.com/gregoriomesafernandez-star"
               target="_blank"
-              className="border-2 border-yellow-300 text-yellow-300 font-semibold px-8 py-4 rounded-2xl hover:bg-yellow-300 hover:text-blue-900 transition-all text-lg"
+              className="border-2 border-cyan-600 text-cyan-600 dark:border-cyan-500 
+                       dark:text-cyan-600 font-semibold px-8 py-4 rounded-2xl hover:bg-cyan-500  dark:hover:bg-cyan-500 
+                       hover:text-gray-700 dark:hover:text-gray-700 transition-all text-lg"
             >
               GitHub
             </Link>
 
             <Link 
               href="#contacto"
-              className="border-2 border-white font-semibold px-8 py-4 rounded-2xl hover:bg-white hover:text-blue-700 transition-all text-lg"
+              className="border-2 border-slate-700 text-slate-700 dark:border-white dark:text-white font-semibold 
+                         px-8 py-4 rounded-2xl hover:bg-slate-700 dark:hover:bg-white hover:text-gray-200 dark:hover:text-gray-600 transition-all text-lg"
             >
               Hablemos
             </Link>
+            
+          </div>
+
+        </div>
+
+        <div className="absolute right-[200px] top-1/2 -translate-y-1/2">
+          <div className="
+            w-96 h-96
+            rounded-full
+            p-1
+            bg-gradient-to-br 
+            from-blue-300 to-cyan-600
+            dark:from-blue-500 dark:via-violet-500 dark:to-cyan-400
+            animate-[imgHero2_2s_ease-in-out_infinite]
+            dark:animate-[imgHero_2s_ease-in-out_infinite]
+          ">
+            <img
+              src="/customers/gregorio.png"
+              alt="Gregorio José Mesa Fernández"
+              className="w-full h-full rounded-full object-cover"
+            />
           </div>
         </div>
       </section>
 
       {/* Sobre mí */}
-      <section id="sobre-mi" className="py-24 bg-gradient-to-b from-white to-slate-50">
-        <div className="max-w-4xl mx-auto px-6 text-center text-bold">
-          <h2 className="text-4xl font-bold mb-12 text-gray-800">Sobre mí</h2>
-          <div className="max-w-3xl mx-auto text-lg text-gray-700 font-medium leading-relaxed">
+      <section ref={sobreMiRef} id="sobre-mi" className="grid grid-cols-1 lg:grid-cols-2 items-center mb-12">
+        
+        <div className={`${isVisible ? "animate-[SobreMiTop_3s_ease-in-out_forwards]" : "opacity-0"} font-texto max-w-4xl ml-10 p-10 `}>
 
-            <p>
+          <h2 className="text-md font-semibold mb-8 ml-10 bg-gradient-to-r from-cyan-600 to-cyan-700 dark:from-blue-400 dark:to-cyan-400 bg-clip-text text-transparent tracking-widest">SOBRE MÍ</h2>
+          
+          <div className="max-w-3xl text-lg text-center text-slate-700 dark:text-blue-100 leading-relaxed">
+
+            <p className={`${isVisible
+                              ? "animate-[SobreMiTop_0.6s_ease-in-out_0.2s_both]"
+                              : "opacity-0"
+                          }`}>
               Soy desarrollador web apasionado por crear aplicaciones funcionales y atractivas. Me gusta aprender nuevas 
               tecnologías y aplicarlas en proyectos reales, desarrollando soluciones completas tanto en frontend como en backend.
             </p>
             
-            <p className="mt-10">
+            <p className={`${isVisible
+                              ? "animate-[SobreMiTop_0.6s_ease-in-out_0.4s_both]"
+                              : "opacity-0"
+                          } mt-10`} >
               Cuento con formación en Desarrollo de Aplicaciones Web (DAW) y Administración de Sistemas Informáticos en Red (ASIR). 
               Tras varios años de experiencia en otros sectores, he decidido enfocar mi carrera en el desarrollo de software, una disciplina que he estudiado y practicado de forma constante mediante proyectos propios.
             </p>
 
-            <p className="mt-10"> 
+            <p className={`${isVisible
+                              ? "animate-[SobreMiTop_0.6s_ease-in-out_0.6s_both]"
+                              : "opacity-0"
+                          } mt-10`} > 
               A través de mis proyectos he adquirido experiencia práctica en 
               <span className="font-semibold text-blue-600"> Laravel</span>, 
               <span className="font-semibold text-blue-600"> Symfony</span>, 
@@ -172,264 +485,434 @@ export default function Home() {
 
           </div>
         </div>
+
+        {/* Codigo developer */}
+        <div className={`${isVisible
+                          ? "animate-[SobreMiRight_0.8s_ease-out_1.3s_both]"
+                          : "opacity-0"
+                        } rounded-2xl mx-auto border border-cyan-400 dark:border-cyan-400/20 bg-cyan-950/80 dark:bg-slate-950/60 p-6 shadow-lg`}>
+
+          <div className="flex gap-2 mb-5">
+            <span className="w-3 h-3 rounded-full bg-red-400"></span>
+            <span className="w-3 h-3 rounded-full bg-yellow-400"></span>
+            <span className="w-3 h-3 rounded-full bg-green-400"></span>
+          </div>
+
+          <pre className="text-sm md:text-base font-mono">
+            <code>
+              <span className="text-purple-400">const</span>{" "}
+              <span className="text-cyan-300">developer</span>{" "}
+              = {"{"}
+              {"\n"}
+              {"  "}name: <span className="text-green-400">"Gregorio José"</span>,
+              {"\n"}
+              {"  "}surname: <span className="text-green-400">"Mesa Fernández"</span>,
+              {"\n"}
+              {"  "}role: <span className="text-green-400">"Full Stack"</span>,
+              {"\n"}
+              {"  "}focus: [
+              <span className="text-green-400">"Frontend"</span>,{" "}
+              <span className="text-green-400">"Backend"</span>,{" "}
+              <span className="text-green-400">"APIs"</span>,{" "}
+              <span className="text-green-400">"Databases"</span>
+              ],
+              {"\n"}
+              {"  "}learning: <span className="text-orange-400">true</span>
+              {"\n"}
+              {"}"};
+            </code>
+          </pre>
+
+        </div>
       </section>
 
       {/* Habilidades */}
-      <section id="habilidades" className="py-20 bg-blue-100/40">
-        <div className="max-w-6xl mx-auto px-6">
-          <h2 className="text-4xl font-bold text-center mb-16 text-gray-900">
-            Habilidades
+      <section id="habilidades" className="py-2 mb-48">
+        <div className="max-w-6xl mx-auto px-4">
+          <h2 className="text-md font-semibold mb-12 mt-16 bg-gradient-to-r from-cyan-600 to-cyan-700 dark:from-blue-400 dark:to-cyan-400 bg-clip-text text-transparent tracking-widest">
+            HABILIDADES
           </h2>
 
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-24">
             
             {/* Frontend */}
-            <div className="bg-white p-8 rounded-3xl shadow-md hover:-translate-y-2 transition-all">
-              <h3 className="text-2xl font-bold mb-6 text-blue-600">Frontend</h3>
-
-              <div className="flex flex-wrap gap-3">
-                {["HTML", "CSS", "JavaScript", "TypeScript", "Angular", "Next.js", "React", "Vue.js", "Tailwind CSS", "Bootstrap"].map((skill) => (
-                  <span key={skill} className="px-4 py-2 bg-blue-100 text-blue-700 rounded-full font-medium">
-                    {skill}
-                  </span>
-                ))}
-              </div>
+            <div className="skill-card self-start bg-transparent p-2" 
+                 style={{
+                          "--skill-color": "#22d3ee",
+                          "--skill-glow": darkMode
+                            ? "rgba(34, 211, 238, 0.35)"
+                            : "rgba(34, 211, 238, 0.10)",
+                        } as React.CSSProperties}>
+            
+              <h3 className="skill-title text-2xl font-bold pl-4 mb-6 text-cyan-600 dark:text-cyan-300">Frontend</h3>
+                <ul className="grid grid-cols-2 list-disc list-inside marker:text-cyan-600 dark:marker:text-cyan-400">
+                  
+                  {["JavaScript", "TypeScript", "Angular", "Next.js", "React", "Vue.js", "Tailwind CSS", "Bootstrap"].map((skill) => (
+                    <li key={skill} className="px-4 py-2 pl-8 text-cyan-800 dark:text-cyan-100 font-medium whitespace-nowrap">
+                      {skill}
+                    </li>
+                  ))}
+                </ul>
             </div>
 
+            
+
+            
             {/* Backend */}
-            <div className="bg-white p-8 rounded-3xl shadow-md hover:-translate-y-2 transition-all">
-              <h3 className="text-2xl font-bold mb-6 text-emerald-600">Backend</h3>
-
-              <div className="flex flex-wrap gap-3">
-                {["PHP", "Laravel", "Symfony", "Node.js", "Express.js", "REST API", "JWT", "MySQL", "MongoDB", "Mongoose"].map((skill) => (
-                  <span key={skill} className="px-4 py-2 bg-emerald-100 text-emerald-700 rounded-full font-medium">
-                    {skill}
-                  </span>
-                ))}
-              </div>
+            <div className="skill-card self-start bg-transparent p-2" 
+                 style={{
+                          "--skill-color": "#a78bfa",
+                          "--skill-glow": darkMode
+                            ? "rgba(167, 139, 250, 0.35)"
+                            : "rgba(167, 139, 250, 0.10)",
+                        } as React.CSSProperties}>
+            
+              <h3 className="skill-title text-2xl font-bold pl-4 mb-6 text-violet-600 dark:text-violet-300">Backend</h3>
+                <ul className="grid grid-cols-2 list-disc list-inside marker:text-violet-600 dark:marker:text-violet-400">
+                  
+                  {["PHP", "Laravel", "Symfony", "Node.js", "Express.js", "Python", "Django", "Flask", "REST API", "JWT", "MySQL", "MongoDB", "Mongoose", "SQLite"].map((skill) => (
+                    <li key={skill} className="px-4 py-2 pl-8 text-violet-800 dark:text-violet-100 font-medium whitespace-nowrap">
+                      {skill}
+                    </li>
+                  ))}
+                </ul>
             </div>
+
+            
 
             {/* Herramientas */}
-            <div className="bg-white p-8 rounded-3xl shadow-md hover:-translate-y-2 transition-all">
-              <h3 className="text-2xl font-bold mb-6 text-amber-600">Herramientas</h3>
-
-              <div className="flex flex-wrap gap-3">
-                {["Git", "GitHub", "VS Code", "Postman"].map((tool) => (
-                  <span key={tool} className="px-4 py-2 bg-amber-100 text-amber-700 rounded-full font-medium">
-                    {tool}
-                  </span>
-                ))}
-              </div>
+            <div className="skill-card self-start bg-transparent p-2" 
+                 style={{
+                          "--skill-color": "#f97316",
+                          "--skill-glow": darkMode
+                            ? "rgba(249, 115, 22, 0.30)"
+                            : "rgba(249, 115, 22, 0.08)",
+                        } as React.CSSProperties}>
+            
+              <h3 className="skill-title text-2xl font-bold pl-4 mb-6 text-orange-600 dark:text-orange-300">Herramientas</h3>
+                <ul className="list-disc list-inside marker:text-orange-600 dark:marker:text-orange-400">
+                  
+                  {["Git", "GitHub", "VS Code", "Postman"].map((skill) => (
+                    <li key={skill} className="px-4 py-2 pl-8 text-orange-800 dark:text-orange-100 font-medium">
+                      {skill}
+                    </li>
+                  ))}
+                </ul>
             </div>
+
+
           </div>
         </div>
       </section>
 
       {/* Proyectos */}
-      <section id="proyectos" className="py-24 bg-gray-100">
+      <section id="proyectos" className="mb-20 scroll-mt-12">
         <div className="max-w-6xl mx-auto px-6">
-          <h2 className="text-4xl font-bold text-center mb-16 text-gray-800">
-            Mis Proyectos
+          <h2 className="text-md font-semibold mb-12 mt-16 bg-gradient-to-r from-cyan-600 to-cyan-700 dark:from-blue-400 dark:to-cyan-400 bg-clip-text text-transparent tracking-widest">
+            PROYECTOS
           </h2>
 
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div>
             <ProjectCard 
               title="Red Social con Symfony"
               description="Plataforma de red social desarrollada con Symfony que incluye autenticación de usuarios, publicaciones, likes, seguidores, mensajes privados y sistema de notificaciones."
-              image="/projects/social-network.png"
+              image="/projects/social-network-mockup.png"
               technologies={["Symfony 7", "PHP", "MySQL", "Twig", "Bootstrap","jQuery / AJAX", "CSS"]}
               github="https://github.com/gregoriomesafernandez-star/social-network-symfony.git"
               demo="https://darkgray-woodpecker-887417.hostingersite.com/"
+              reverse={false}
             />
 
             <ProjectCard 
               title="Plataforma de Vídeos con Laravel"
               description="Plataforma de vídeos desarrollada con Laravel que incluye subida de vídeos, miniaturas, comentarios, búsqueda, canales de usuario y reproducción multimedia."
-              image="/projects/laravel-videos.PNG"
+              image="/projects/videos-laravel-mockup.png"
               technologies={["Laravel", "PHP", "MySQL", "Blade", "Breeze", "Tailwind CSS", "Alpine.js"]}
               github="https://github.com/gregoriomesafernandez-star/videos-laravel.git"
-              
+              reverse={true}
+            />
+
+            <ProjectCard
+              title="Plataforma de Música (Angular + Node.js)"
+              description="Aplicación web de gestión y reproducción musical desarrollada con Angular y Node.js. Permite gestionar artistas, álbumes y canciones, con autenticación JWT, control de acceso basado en roles y subida de imágenes y archivos de audio. Arquitectura frontend/backend separada con una API REST y MongoDB."
+              image="/projects/musicfy-mockup-shot.png"
+              technologies={[
+                "Angular 21",
+                "TypeScript",
+                "Tailwind CSS 4",
+                "Node.js",
+                "Express",
+                "MongoDB",
+                "Mongoose",
+                "JWT",
+                "REST API",
+                "Multer"
+              ]}
+              githubFrontend="https://github.com/gregoriomesafernandez-star/musicfy-frontend"
+              githubBackend="https://github.com/gregoriomesafernandez-star/musicfy-backend"
+              reverse={false}
             />
 
             <ProjectCard
               title="Sistema de Gestión de Vehículos"
-              description="Aplicación frontend desarrollada con Angular que incluye autenticación JWT, gestión de vehículos, formularios reactivos y comunicación con una API REST desarrollada en Laravel."
-              image="/projects/cars-angular.PNG"
-              technologies={[
-                "Angular 21",
-                "TypeScript",
-                "RxJS",
-                "Tailwind CSS",
-                "JWT",
-                "REST API"
-              ]}
-              github="https://github.com/gregoriomesafernandez-star/cars-angular"
-            />
-
-            <ProjectCard
-              title="API de Gestión de Vehículos"
-              description="API REST desarrollada con Laravel que incluye autenticación JWT, validación de datos y un sistema CRUD completo para la gestión de vehículos."
-              image="/projects/image.png"
-              technologies={[
-                "Laravel 12",
-                "PHP",
-                "MySQL",
-                "JWT",
-                "REST API",
-                "Eloquent ORM"
-              ]}
-              github="https://github.com/gregoriomesafernandez-star/cars-api-laravel"
+              description="Aplicación web desarrollada con Angular y Laravel que permite gestionar vehículos mediante una arquitectura frontend/backend separada. Incluye autenticación JWT, operaciones CRUD, formularios reactivos y comunicación con una API REST para la gestión de vehículos."
+              image="/projects/cars-angular-laravel-mockup.png"
+              technologies={["Angular 21", "TypeScript", "RxJS", "Tailwind CSS", "Laravel 12", "PHP", "MySQL", "JWT", "REST API", "Eloquent ORM"]}
+              githubFrontend="https://github.com/gregoriomesafernandez-star/cars-angular"
+              githubBackend="https://github.com/gregoriomesafernandez-star/cars-api-laravel"
+              reverse={true}
             />
 
             <ProjectCard
               title="API de Gestión de Proyectos"
               description="API REST desarrollada con Node.js, Express y MongoDB que incluye operaciones CRUD, gestión de imágenes con Multer y almacenamiento de datos con Mongoose."
-              image="/projects/api-node.png"
-              technologies={[
-                "Node.js",
-                "Express",
-                "MongoDB",
-                "Mongoose",
-                "Multer",
-                "REST API"
-              ]}
+              image="/projects/node-mongo-mockup.png"
+              technologies={[ "Node.js", "Express", "MongoDB", "Mongoose", "Multer", "REST API"]}
               github="https://github.com/gregoriomesafernandez-star/projects-api-node-mongodb"
+              reverse={false}
             />
 
-            <ProjectCard
-              title="Gestor de Tareas"
-              description="Aplicación de gestión de tareas con React y Supabase. Incluye autenticación, gestión de proyectos, organización de tareas por columnas, drag and drop y seguridad con RLS."
-              image="/projects/trabajo-diario.PNG"
-              technologies={[
-                "React",
-                "JavaScript",
-                "Supabase",
-                "PostgreSQL",
-                "Vite",
-                "CSS3"
-              ]}
-              github="https://github.com/gregoriomesafernandez-star/daily-task-manager-react"
-              demo="https://daily-task-manager-react-five.vercel.app/"
-            />
           </div>
         </div>
       </section>
 
       {/* Contacto */}
-      <section id="contacto" className="py-24 bg-slate-900 text-white">
-        <div className="max-w-6xl mx-auto px-6">
+      <section id="contacto" className="pb-24 bg-[#f2f2f0] dark:bg-[#13203e] text-white mt-24 ">
+        <div className="max-w-6xl mx-auto px-6 pt-12">
 
-          <div className="text-center mb-16">
-            <h2 className="text-4xl font-bold mb-4">
-              Contacto
+          {/* Título */}
+          <div className="mb-16">
+
+            <h2 className="text-md font-semibold tracking-widest mb-4 bg-gradient-to-r from-cyan-600 to-cyan-700 dark:from-blue-400 dark:to-cyan-400 bg-clip-text text-transparent">
+              CONTACTO
             </h2>
 
-            <p className="text-xl text-slate-300">
+            <p className="text-xl text-center text-slate-700 dark:text-slate-300">
               ¿Tienes una oportunidad laboral o un proyecto?
               Estaré encantado de hablar contigo.
             </p>
+
+            <div className="w-12 h-1 bg-gradient-to-r from-cyan-400 to-purple-500 mx-auto mt-5 rounded-full" />
+
           </div>
 
-          <div className="grid lg:grid-cols-2 gap-10">
+          <div className="grid lg:grid-cols-2 items-stretch gap-10">
+ 
+            {/* FORMULARIO */}
+            <form
+              action="https://formspree.io/f/xnjyybkz"
+              method="POST"
+              className="bg-[#d5d4d3] dark:bg-[#0B1629] p-8 rounded-xl border border-blue-500/30 shadow-lg shadow-blue-500/5"
+            >
 
-            {/* Formulario */}
-            <form action="https://formspree.io/f/xnjyybkz" method="POST" className="bg-slate-800 p-8 rounded-3xl shadow-lg">
+              {/* Cabecera */}
+              <div className="flex items-center gap-4 mb-6">
 
+                <div className="w-12 h-12 flex items-center justify-center rounded-lg bg-blue-400/20 dark:bg-blue-600/20">
+                  <Mail
+                    size={24}
+                    className="text-cyan-600 dark:text-cyan-500"
+                  />
+                </div>
+
+                <div className="text-slate-700 dark:text-white">
+                  <h3 className="text-xl font-bold">
+                    Envíame un mensaje
+                  </h3>
+
+                  <p className="text-sm text-slate-600 dark:text-slate-400">
+                    Cuéntame sobre tu proyecto, una oportunidad o cualquier consulta.
+                  </p>
+                </div>
+
+              </div>
+
+              {/* Nombre + Email */}
               <div className="grid md:grid-cols-2 gap-4 mb-4">
 
-                <input
-                  type="text"
-                  required
-                  placeholder="Tu nombre"
-                  name="name"
-                  className="w-full px-4 py-4 rounded-xl bg-slate-900 border border-slate-700 focus:outline-none focus:border-blue-500 transition duration-500"
+                <div className="relative">
+
+                  <User
+                    size={18}
+                    className="absolute left-4 top-1/2 -translate-y-1/2 text-blue-800 dark:text-blue-400"
+                  />
+
+                  <input
+                    type="text"
+                    required
+                    placeholder="Tu nombre"
+                    name="name"
+                    className="w-full pl-11 pr-4 py-4 rounded-xs bg-[#dedad1] dark:bg-[#081224] 
+                               border border-gray-400 dark:border-blue-500/20 focus:outline-none 
+                               focus:border-cyan-600 dark:focus:border-cyan-400 transition duration-500 text-white placeholder:text-slate-500"
+                  />
+
+                </div>
+
+                <div className="relative">
+
+                  <Mail
+                    size={18}
+                    className="absolute left-4 top-1/2 -translate-y-1/2 text-blue-800 dark:text-blue-400"
+                  />
+
+                  <input
+                    type="email"
+                    required
+                    placeholder="tucorreo@gmail.com"
+                    name="email"
+                    className="w-full pl-11 pr-4 py-4 rounded-xs bg-[#dedad1] 
+                             dark:bg-[#081224] border border-gray-400 dark:border-blue-500/20 
+                             focus:outline-none focus:border-cyan-600 dark:focus:border-cyan-400 transition duration-500 text-white placeholder:text-slate-500"
+                  />
+
+                </div>
+
+              </div>
+
+              {/* Mensaje */}
+              <div className="relative">
+
+                <MessageSquare
+                  size={18}
+                  className="absolute left-4 top-5 text-blue-800 dark:text-blue-400"
                 />
 
-                <input
-                  type="email"
+                <textarea
+                  rows={6}
                   required
-                  placeholder="tucorreo@gmail.com"
-                  name="email"
-                  className="w-full px-4 py-4 rounded-xl bg-slate-900 border border-slate-700 focus:outline-none focus:border-blue-500 transition duration-500"
+                  placeholder="Cuéntame sobre tu proyecto..."
+                  name="message"
+                  className="w-full pl-11 pr-4 py-4 rounded-xs bg-[#dedad1] 
+                           dark:bg-[#081224] border border-gray-400 dark:border-blue-500/20 
+                           focus:outline-none focus:border-cyan-600 dark:focus:border-cyan-400 resize-none transition duration-500 text-white placeholder:text-slate-500"
                 />
 
               </div>
 
-              <textarea
-                rows={8}
-                required
-                placeholder="Cuéntame sobre tu proyecto..."
-                name="message"
-                className="w-full px-4 py-4 rounded-xl bg-slate-900 border border-slate-700 focus:outline-none focus:border-blue-500 resize-none transition duration-500"
-              ></textarea>
-
+              {/* Botón */}
               <button
                 type="submit"
-                className="w-full mt-6 bg-blue-600 hover:bg-blue-700 py-4 rounded-xl font-semibold text-lg transition-all"
+                className="w-full mt-6 flex items-center justify-center gap-2 bg-gradient-to-r from-cyan-600 to-blue-600 dark:from-cyan-500 dark:to-blue-600 py-4 rounded-lg font-semibold text-lg transition-all duration-300 hover:scale-[1.01] hover:shadow-lg hover:shadow-blue-500/25"
               >
+                <Send size={19} />
                 Enviar mensaje
               </button>
 
             </form>
 
-            {/* Información */}
-            <div className="bg-slate-800 p-8 rounded-3xl shadow-lg">
+            {/* INFORMACIÓN */}
+            <div className="bg-[#d5d4d3] dark:bg-[#0B1629] p-8 rounded-xl border border-blue-500/30 shadow-lg shadow-blue-500/5">
 
-              <h3 className="text-2xl font-bold mb-8">
+              <h3 className="text-2xl text-slate-700 dark:text-white font-bold mb-3">
                 Información de contacto
               </h3>
 
+              <p className="text-sm text-slate-600 dark:text-slate-400 mb-8">
+                También puedes contactarme por estos medios:
+              </p>
+
               <div className="space-y-8">
 
-                <div>
-                  <p className="text-blue-400 font-semibold mb-1">
-                    📧 Email
-                  </p>
+                {/* EMAIL */}
+                <div className="flex items-center gap-4">
 
-                  <a
-                    href="mailto:gregorio.mesafernandez@gmail.com"
-                    className="text-slate-300 hover:text-white"
-                  >
-                    gregorio.mesafernandez@gmail.com
-                  </a>
+                  <div className="w-11 h-11 flex-shrink-0 flex items-center justify-center rounded-full bg-blue-500/20">
+                    <Mail
+                      size={20}
+                      className="text-cyan-600 dark:text-cyan-500"
+                    />
+                  </div>
+
+                  <div>
+                    <p className="text-cyan-600 dark:text-blue-400 font-semibold text-sm">
+                      Email
+                    </p>
+
+                    <a
+                      href="mailto:gregorio.mesafernandez@gmail.com"
+                      className="text-slate-700 dark:text-slate-300 hover:text-slate-500 dark:hover:text-slate-500 transition"
+                    >
+                      gregorio.mesafernandez@gmail.com
+                    </a>
+                  </div>
+
                 </div>
 
-                <div>
-                  <p className="text-blue-400 font-semibold mb-1">
-                    💻 GitHub
-                  </p>
+                {/* GITHUB */}
+                <div className="flex items-center gap-4">
 
-                  <a
-                    href="https://github.com/gregoriomesafernandez-star"
-                    target="_blank"
-                    className="text-slate-300 hover:text-white"
-                  >
-                    github.com/gregoriomesafernandez-star
-                  </a>
+                  <div className="w-11 h-11 flex-shrink-0 flex items-center justify-center rounded-full bg-blue-500/20">
+                    <FaGithub size={20}
+                              className="text-cyan-600 dark:text-cyan-500"
+                    />
+                    
+                  </div>
+
+                  <div>
+                    <p className="text-cyan-600 dark:text-blue-400 font-semibold text-sm">
+                      GitHub
+                    </p>
+
+                    <a
+                      href="https://github.com/gregoriomesafernandez-star"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-slate-700 dark:text-slate-300 hover:text-slate-500 dark:hover:text-slate-500 transition"
+                    >
+                      github.com/gregoriomesafernandez-star
+                    </a>
+                  </div>
+
                 </div>
 
-                <div>
-                  <p className="text-blue-400 font-semibold mb-1">
-                    🔗 LinkedIn
-                  </p>
+                {/* LINKEDIN */}
+                <div className="flex items-center gap-4">
 
-                  <a
-                    href="https://www.linkedin.com/in/gregorio-mesa-fernandez/"
-                    target="_blank"
-                    className="text-slate-300 hover:text-white"
-                  >
-                    https://www.linkedin.com/in/gregorio-mesa-fernandez/
-                  </a>
+                  <div className="w-11 h-11 flex-shrink-0 flex items-center justify-center rounded-full bg-blue-500/20">
+                    <FaLinkedin 
+                      size={20} 
+                      className="text-cyan-600 dark:text-cyan-500" 
+                    />
+                  </div>
+                    
+                  <div>
+                    <p className="text-cyan-600 dark:text-blue-400 font-semibold text-sm">
+                      LinkedIn
+                    </p>
+
+                    <a
+                      href="https://www.linkedin.com/in/gregorio-mesa-fernandez/"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-slate-700 dark:text-slate-300 hover:text-slate-500 dark:hover:text-slate-500 transition"
+                    >
+                      linkedin.com/in/gregorio-mesa-fernandez/
+                    </a>
+                  </div>
+
                 </div>
 
-                <div>
-                  <p className="text-blue-400 font-semibold mb-1">
-                    📍 Ubicación
-                  </p>
+                {/* UBICACIÓN */}
+                <div className="flex items-center gap-4">
 
-                  <p className="text-slate-300">
-                    Tenerife, Islas Canarias, España
-                  </p>
+                  <div className="w-11 h-11 flex-shrink-0 flex items-center justify-center rounded-full bg-blue-500/20">
+                    <MapPin
+                      size={20}
+                      className="text-cyan-600 dark:text-cyan-500"
+                    />
+                  </div>
+
+                  <div>
+                    <p className="text-cyan-600 dark:text-blue-400 font-semibold text-sm">
+                      Ubicación
+                    </p>
+
+                    <p className="text-slate-700 dark:text-slate-300 hover:text-slate-500 dark:hover:text-slate-500">
+                      Tenerife, Islas Canarias, España
+                    </p>
+                  </div>
+
                 </div>
 
               </div>
@@ -441,15 +924,15 @@ export default function Home() {
       </section>
 
       {/* Footer */}
-      <footer className="bg-slate-950 text-slate-400 border-t border-slate-800">
+      <footer className="dark:bg-slate-950 dark:text-slate-400 border-t border-slate-300 dark:border-slate-800">
         <div className="max-w-6xl mx-auto px-6 py-5">
 
           <div className="flex flex-col md:flex-row justify-between items-center gap-6">
 
             {/* Logo / Nombre */}
             <div>
-              <h3 className="text-3xl font-bold text-white">
-                Gregorio<span className="text-blue-500">Dev</span>
+              <h3 className="text-3xl font-bold dark:text-white">
+                Gregorio<span className="text-cyan-600 dark:text-blue-500">Dev</span>
               </h3>
             </div>
 
