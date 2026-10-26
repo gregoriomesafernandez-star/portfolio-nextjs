@@ -3,6 +3,7 @@
 import { useEffect, useState, useRef } from "react";
 import Link from "next/link";
 import ProjectCard from "./components/ProjectCard";
+import ProjectsShowcase from "./components/ProjectsShowcase";
 import {Download, Mail, MapPin, Send, User, MessageSquare, Moon, Sun} from "lucide-react";
 
 import { FaGithub, FaLinkedin } from "react-icons/fa";
@@ -154,20 +155,20 @@ export default function Home() {
   }, []);
 
   return (
-    <main className="min-h-screen bg-[#E8E4D9] text-slate-900 dark:bg-slate-900 dark:text-white transition-colors duration-500">
+    <main className="w-full min-h-screen bg-[#E8E4D9] text-slate-900 dark:bg-slate-900 dark:text-white transition-colors duration-500">
 
       {/* Navbar */}
       <nav
         className={`fixed top-0 left-0 w-full z-50  ${
           scrolled
-            ? "border-b bg-gradient-to-b from-[#F8F4EA] via-[#F8F4EA]/80 to-[#F8F4EA] dark:border-gray-800 dark:bg-gradient-to-b dark:from-slate-700 dark:via-slate-800/90 dark:to-slate-900 backdrop-blur-md shadow-xl"
+            ? "border-b bg-[#F8F4EA]/70 border-gray-200 dark:border-gray-700 dark:bg-slate-800/70 backdrop-blur-2xl shadow-xl"
             
-            : "bg-gradient-to-b from-[#F8F4EA] via-[#F8F4EA]/80 to-[#F8F4EA] dark:bg-gradient-to-b dark:from-slate-700 dark:via-slate-800/80 dark:to-slate-900"
+            : "bg-gradient-to-b from-[#F8F4EA] via-[#F8F4EA]/80 to-[#F8F4EA] dark:bg-gradient-to-b dark:from-slate-700 dark:via-slate-800/80 dark:to-slate-900 backdrop-blur-md"
         }`}
       >
 
         
-        <div className="max-w-6xl mx-auto px-6 py-4 flex justify-between items-center">
+        <div className="w-full max-w-6xl mx-auto px-4 sm:px-6 py-4 flex justify-between items-center gap-4">
           
           <div className="text-2xl font-bold dark:text-white">
             G<span className="text-cyan-600 dark:text-blue-500">
@@ -249,10 +250,12 @@ export default function Home() {
                                               hover:after:w-full">CONTACTO</Link>
           </div>
           
-          <div className="flex gap-4">
+          <div className="hidden lg:flex gap-4">
+
+            {/* Botón Claro - Oscuro */}
             <button
               onClick={() => setDarkMode(!darkMode)}
-              className="hidden lg:flex items-center justify-center w-10 h-10 rounded-full border 
+              className="flex items-center justify-center w-10 h-10 rounded-full border 
                        border-cyan-700
                        dark:border-blue-700
                        bg-blue-800/10
@@ -266,19 +269,17 @@ export default function Home() {
               aria-label="Cambiar tema"
             >
               {darkMode ? (
-                <Sun className="w-5 h-5" />
+                <Sun className="w-4 h-4" />
               ) : (
-                <Moon className="w-5 h-5" />
+                <Moon className="w-4 h-4" />
               )}
             </button>
 
             {/* Botón CV desktop */}
-            
-            
             <a 
               href="/CV-Gregorio-Mesa-Fernandez2026.pdf"
               download
-              className="hidden lg:flex items-center gap-2 border font-nav border-cyan-700 dark:border-blue-500 
+              className="flex items-center gap-2 border font-nav border-cyan-700 dark:border-blue-500 
                          font-bold bg-blue-500/15 px-5 py-2 rounded-full text-xs 
                          tracking-[0.15em] text-cyan-600 dark:text-blue-500 hover:bg-cyan-600 dark:hover:bg-blue-400 
                          hover:text-white dark:hover:text-black transition-colors duration-300"
@@ -288,29 +289,121 @@ export default function Home() {
             </a>
           </div>
           
+          <div className="flex items-center gap-4 lg:hidden">
+            {/* Botón Claro - Oscuro Móvil*/}
+            <button
+              onClick={() => setDarkMode(!darkMode)}
+              className="flex items-center justify-center w-10 h-10 rounded-full border 
+                        border-cyan-700
+                        dark:border-blue-700
+                        bg-blue-800/10
+                        dark:bg-blue-500/10 
+                        text-gray-600
+                        dark:text-gray-200/70
+                        hover:bg-blue-800/20
+                        dark:hover:bg-blue-500/20 
+                          transition-all 
+                          duration-300"
+              aria-label="Cambiar tema"
+            >
+              {darkMode ? (
+                <Sun className="w-4 h-4" />
+              ) : (
+                <Moon className="w-4 h-4" />
+              )}
+            </button>
 
-          {/* Botón hamburguesa móvil */}
-          <button
-            onClick={() => setMenuOpen(!menuOpen)}
-            className="lg:hidden text-3xl text-gray-800"
-          >
-            {menuOpen ? "✕" : "☰"}
-          </button>
+            {/* Botón hamburguesa móvil */}
+            <button
+              onClick={() => setMenuOpen(!menuOpen)}
+              className="text-3xl text-gray-800 dark:text-gray-200"
+            >
+              {menuOpen ? "✕" : "☰"}
+            </button>
+          </div>
         </div>
 
         {/* Menú móvil */}
         {menuOpen && (
-          <div className="lg:hidden bg-white/95 backdrop-blur-lg border-t border-gray-200 shadow-md">
-            <div className="px-6 py-6 flex flex-col gap-5 text-gray-700 font-medium">
-              <Link href="#sobre-mi" onClick={() => setMenuOpen(false)}>SOBRE MI</Link>
-              <Link href="#habilidades" onClick={() => setMenuOpen(false)}>HABILIDADES</Link>
-              <Link href="#proyectos" onClick={() => setMenuOpen(false)}>PROYECTOS</Link>
-              <Link href="#contacto" onClick={() => setMenuOpen(false)}>CONTACTO</Link>
+          <div className="lg:hidden bg-transparent animate-menu-appear">
+            <div className="px-6 py-6 flex flex-col gap-5 font-medium">
+              <Link href="#sobre-mi" className="hover:text-cyan-700
+                                            dark:hover:text-cyan-500
+                                              font-nav
+                                              tracking-[0.18em]
+                                              transition-colors 
+                                              duration-300
+                                              relative
+                                              after:absolute
+                                              after:left-1/2
+                                              after:-bottom-1
+                                              after:h-[1px]
+                                              after:w-0
+                                              after:bg-cyan-600
+                                              dark:after:bg-cyan-400
+                                              after:transition-all
+                                              after:duration-300
+                                              after:-translate-x-1/2
+                                              hover:after:w-full w-fit mx-auto" onClick={() => setMenuOpen(false)}>SOBRE MI</Link>
+              <Link href="#habilidades" className="hover:text-cyan-700
+                                            dark:hover:text-cyan-500
+                                              font-nav
+                                              tracking-[0.18em]
+                                              transition-colors 
+                                              duration-300
+                                              relative
+                                              after:absolute
+                                              after:left-1/2
+                                              after:-bottom-1
+                                              after:h-[1px]
+                                              after:w-0
+                                              after:bg-cyan-600
+                                              dark:after:bg-cyan-400
+                                              after:transition-all
+                                              after:duration-300
+                                              after:-translate-x-1/2
+                                              hover:after:w-full w-fit mx-auto" onClick={() => setMenuOpen(false)}>HABILIDADES</Link>
+              <Link href="#proyectos" className="hover:text-cyan-700
+                                            dark:hover:text-cyan-500
+                                              font-nav
+                                              tracking-[0.18em]
+                                              transition-colors 
+                                              duration-300
+                                              relative
+                                              after:absolute
+                                              after:left-1/2
+                                              after:-bottom-1
+                                              after:h-[1px]
+                                              after:w-0
+                                              after:bg-cyan-600
+                                              dark:after:bg-cyan-400
+                                              after:transition-all
+                                              after:duration-300
+                                              after:-translate-x-1/2
+                                              hover:after:w-full w-fit mx-auto" onClick={() => setMenuOpen(false)}>PROYECTOS</Link>
+              <Link href="#contacto" className="hover:text-cyan-700
+                                            dark:hover:text-cyan-500
+                                              font-nav
+                                              tracking-[0.18em]
+                                              transition-colors 
+                                              duration-300
+                                              relative
+                                              after:absolute
+                                              after:left-1/2
+                                              after:-bottom-1
+                                              after:h-[1px]
+                                              after:w-0
+                                              after:bg-cyan-600
+                                              dark:after:bg-cyan-400
+                                              after:transition-all
+                                              after:duration-300
+                                              after:-translate-x-1/2
+                                              hover:after:w-full w-fit mx-auto" onClick={() => setMenuOpen(false)}>CONTACTO</Link>
 
               <a
                 href="/Gregorio-Mesa-CV.pdf"
                 download
-                className="bg-blue-600 text-center px-5 py-3 rounded-lg font-medium hover:bg-blue-700 transition-colors"
+                className="w-[40%] bg-cyan-600 dark:bg-blue-600 text-center px-5 py-3 mx-auto rounded-lg font-medium hover:bg-cyan-500 dark:hover:bg-blue-400 transition-colors"
               >
                 Descargar CV
               </a>
@@ -320,7 +413,7 @@ export default function Home() {
       </nav>
 
       {/* Banner Section */}
-      <section className="relative min-h-[800px] overflow-hidden text-white pt-40 pb-28">
+      <section className="flex flex-col relative min-h-[800px] text-white pt-40 pb-28">
         
         {/* Partículas */}
         <div className="absolute inset-0 pointer-events-none">
@@ -343,7 +436,8 @@ export default function Home() {
         </div>
 
         {/* Contenido */}
-        <div className="absolute left-28 top-1/2 -translate-y-1/2 max-w-5xl mx-auto px-6 text-center">
+        <div className="lg:absolute lg:left-[5%] lg:top-1/2 lg:-translate-y-1/2
+                        w-full lg:w-[55%] max-w-5xl mx-auto px-6 text-center">
           
           <span className="
             slide-in-left
@@ -364,25 +458,25 @@ export default function Home() {
             text-gray-600
             dark:text-gray-200
           ">
-            <span className="
-              w-2
-              h-2
-              rounded-full
-              bg-cyan-600
-              dark:bg-[#22D3EE]
-              animate-[glow_2s_ease-in-out_infinite]
-              shrink-0
-            "></span>
-
+            
+          <span className="
+            w-2
+            h-2
+            rounded-full
+            bg-cyan-600
+            dark:bg-[#22D3EE]
+            animate-[glow_2s_ease-in-out_infinite]
+            shrink-0
+          "></span>
             Disponible para nuevos proyectos
           </span>
           
-          <h1 className="font-hero slide-in-left delay-1 font-semibold text-3xl md:text-5xl mb-6 text-gray-700 dark:text-white">
+          <h1 className="font-hero slide-in-left delay-1 font-semibold text-4xl lg:text-5xl mb-6 text-gray-700 dark:text-white">
             Gregorio José <span className="font-bold bg-gradient-to-r italic from-blue-600 to-cyan-500 dark:from-blue-500 dark:to-cyan-400 bg-clip-text text-transparent">
                             Mesa Fernández
                           </span>
           </h1>
-          <h3 className="slide-in-left delay-1 text-5xl md:text-2xl font-bold mb-6 text-gray-700 dark:text-white">
+          <h3 className="slide-in-left delay-1 text-2xl lg:text-3xl font-bold mb-6 text-gray-700 dark:text-white">
             Desarrollador Web <span className="bg-gradient-to-r from-blue-600 to-cyan-500 dark:from-blue-500 dark:to-cyan-400 bg-clip-text text-transparent">
                                 Full Stack
                               </span>
@@ -422,9 +516,21 @@ export default function Home() {
 
         </div>
 
-        <div className="absolute right-[200px] top-1/2 -translate-y-1/2">
+        {/* Foto */}
+        <div className="z-10 mx-auto
+                        mt-20
+                        mb-12
+                        lg:mt-10
+                        lg:absolute
+                        lg:right-[10%]
+                        lg:top-1/2
+                        lg:-translate-y-1/2
+                        w-fit">
           <div className="
-            w-96 h-96
+            w-56 h-56   
+            sm:w-72 sm:h-72
+            lg:w-80 lg:h-80
+            xl:w-[368px] xl:h-[368px]
             rounded-full
             p-1
             bg-gradient-to-br 
@@ -440,12 +546,18 @@ export default function Home() {
             />
           </div>
         </div>
+
       </section>
 
       {/* Sobre mí */}
       <section ref={sobreMiRef} id="sobre-mi" className="grid grid-cols-1 lg:grid-cols-2 items-center mb-12">
         
-        <div className={`${isVisible ? "animate-[SobreMiTop_3s_ease-in-out_forwards]" : "opacity-0"} font-texto max-w-4xl ml-10 p-10 `}>
+        {/* Texto sobre mi */}
+        <div className={`${
+                          isVisible
+                            ? "animate-[SobreMiTop_3s_ease-in-out_forwards]"
+                            : "opacity-0"
+                        } font-texto min-w-0 max-w-4xl mx-auto px-4 py-6 sm:p-10`}>
 
           <h2 className="text-md font-semibold mb-8 ml-10 bg-gradient-to-r from-cyan-600 to-cyan-700 dark:from-blue-400 dark:to-cyan-400 bg-clip-text text-transparent tracking-widest">SOBRE MÍ</h2>
           
@@ -490,7 +602,7 @@ export default function Home() {
         <div className={`${isVisible
                           ? "animate-[SobreMiRight_0.8s_ease-out_1.3s_both]"
                           : "opacity-0"
-                        } rounded-2xl mx-auto border border-cyan-400 dark:border-cyan-400/20 bg-cyan-950/80 dark:bg-slate-950/60 p-6 shadow-lg`}>
+                        } mx-auto lg:w-full min-w-0 max-w-2xl lg:ml-auto lg:mr-6 overflow-hidden rounded-2xl border border-cyan-400 dark:border-cyan-400/20 bg-cyan-950/80 dark:bg-slate-950/60 p-4 sm:p-6 shadow-lg`}>
 
           <div className="flex gap-2 mb-5">
             <span className="w-3 h-3 rounded-full bg-red-400"></span>
@@ -498,7 +610,7 @@ export default function Home() {
             <span className="w-3 h-3 rounded-full bg-green-400"></span>
           </div>
 
-          <pre className="text-sm md:text-base font-mono">
+          <pre className="max-w-full whitespace-pre-wrap break-words text-xs sm:text-sm md:text-base font-mono">
             <code>
               <span className="text-purple-400">const</span>{" "}
               <span className="text-cyan-300">developer</span>{" "}
@@ -529,77 +641,123 @@ export default function Home() {
       {/* Habilidades */}
       <section id="habilidades" className="py-2 mb-48">
         <div className="max-w-6xl mx-auto px-4">
+
           <h2 className="text-md font-semibold mb-12 mt-16 bg-gradient-to-r from-cyan-600 to-cyan-700 dark:from-blue-400 dark:to-cyan-400 bg-clip-text text-transparent tracking-widest">
             HABILIDADES
           </h2>
 
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-24">
-            
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 items-stretch gap-6">
+
             {/* Frontend */}
-            <div className="skill-card self-start bg-transparent p-2" 
-                 style={{
-                          "--skill-color": "#22d3ee",
-                          "--skill-glow": darkMode
-                            ? "rgba(34, 211, 238, 0.35)"
-                            : "rgba(34, 211, 238, 0.10)",
-                        } as React.CSSProperties}>
-            
-              <h3 className="skill-title text-2xl font-bold pl-4 mb-6 text-cyan-600 dark:text-cyan-300">Frontend</h3>
-                <ul className="grid grid-cols-2 list-disc list-inside marker:text-cyan-600 dark:marker:text-cyan-400">
-                  
-                  {["JavaScript", "TypeScript", "Angular", "Next.js", "React", "Vue.js", "Tailwind CSS", "Bootstrap"].map((skill) => (
-                    <li key={skill} className="px-4 py-2 pl-8 text-cyan-800 dark:text-cyan-100 font-medium whitespace-nowrap">
-                      {skill}
-                    </li>
-                  ))}
-                </ul>
+            <div
+              className="skill-card"
+              style={{
+                "--skill-background": darkMode  
+                  ? "rgba(15, 23, 42, 0.35)" 
+                  : "#F4F2EC",
+                "--skill-color": "#22d3ee",
+                "--skill-glow": darkMode
+                  ? "rgba(34, 211, 238, 0.35)"
+                  : "rgba(34, 211, 238, 0.10)",
+              } as React.CSSProperties}
+            >
+              <h3 className="skill-title text-2xl font-bold mb-6 text-cyan-600 dark:text-cyan-300">
+                Frontend
+              </h3>
+
+              <div className="flex flex-wrap gap-2">
+                {[
+                  "JavaScript",
+                  "TypeScript",
+                  "Angular",
+                  "Next.js",
+                  "React",
+                  "Vue.js",
+                  "Tailwind CSS",
+                  "Bootstrap",
+                ].map((skill) => (
+                  <span
+                    key={skill}
+                    className="skill-chip text-cyan-800 dark:text-cyan-100"
+                  >
+                    {skill}
+                  </span>
+                ))}
+              </div>
             </div>
 
-            
-
-            
             {/* Backend */}
-            <div className="skill-card self-start bg-transparent p-2" 
-                 style={{
-                          "--skill-color": "#a78bfa",
-                          "--skill-glow": darkMode
-                            ? "rgba(167, 139, 250, 0.35)"
-                            : "rgba(167, 139, 250, 0.10)",
-                        } as React.CSSProperties}>
-            
-              <h3 className="skill-title text-2xl font-bold pl-4 mb-6 text-violet-600 dark:text-violet-300">Backend</h3>
-                <ul className="grid grid-cols-2 list-disc list-inside marker:text-violet-600 dark:marker:text-violet-400">
-                  
-                  {["PHP", "Laravel", "Symfony", "Node.js", "Express.js", "Python", "Django", "Flask", "REST API", "JWT", "MySQL", "MongoDB", "Mongoose", "SQLite"].map((skill) => (
-                    <li key={skill} className="px-4 py-2 pl-8 text-violet-800 dark:text-violet-100 font-medium whitespace-nowrap">
-                      {skill}
-                    </li>
-                  ))}
-                </ul>
-            </div>
+            <div
+              className="skill-card"
+              style={{
+                "--skill-background": darkMode  
+                  ? "rgba(15, 23, 42, 0.35)" 
+                  : "#F4F2EC",
+                "--skill-color": "#a78bfa",
+                "--skill-glow": darkMode
+                  ? "rgba(167, 139, 250, 0.35)"
+                  : "rgba(167, 139, 250, 0.10)",
+              } as React.CSSProperties}
+            >
+              <h3 className="skill-title text-2xl font-bold mb-6 text-violet-600 dark:text-violet-300">
+                Backend
+              </h3>
 
-            
+              <div className="flex flex-wrap gap-2">
+                {[
+                  "PHP",
+                  "Laravel",
+                  "Symfony",
+                  "Node.js",
+                  "Express.js",
+                  "Python",
+                  "Django",
+                  "Flask",
+                  "REST API",
+                  "JWT",
+                  "MySQL",
+                  "MongoDB",
+                  "Mongoose",
+                  "SQLite",
+                ].map((skill) => (
+                  <span
+                    key={skill}
+                    className="skill-chip text-violet-800 dark:text-violet-100"
+                  >
+                    {skill}
+                  </span>
+                ))}
+              </div>
+            </div>
 
             {/* Herramientas */}
-            <div className="skill-card self-start bg-transparent p-2" 
-                 style={{
-                          "--skill-color": "#f97316",
-                          "--skill-glow": darkMode
-                            ? "rgba(249, 115, 22, 0.30)"
-                            : "rgba(249, 115, 22, 0.08)",
-                        } as React.CSSProperties}>
-            
-              <h3 className="skill-title text-2xl font-bold pl-4 mb-6 text-orange-600 dark:text-orange-300">Herramientas</h3>
-                <ul className="list-disc list-inside marker:text-orange-600 dark:marker:text-orange-400">
-                  
-                  {["Git", "GitHub", "VS Code", "Postman"].map((skill) => (
-                    <li key={skill} className="px-4 py-2 pl-8 text-orange-800 dark:text-orange-100 font-medium">
-                      {skill}
-                    </li>
-                  ))}
-                </ul>
-            </div>
+            <div
+              className="skill-card"
+              style={{
+                "--skill-background": darkMode  
+                  ? "rgba(15, 23, 42, 0.35)" 
+                  : "#F4F2EC",
+                "--skill-color": "#f97316",
+                "--skill-glow": darkMode
+                  ? "rgba(249, 115, 22, 0.30)"
+                  : "rgba(249, 115, 22, 0.08)",
+              } as React.CSSProperties}
+            >
+              <h3 className="skill-title text-2xl font-bold mb-6 text-orange-500 dark:text-orange-300">
+                Herramientas
+              </h3>
 
+              <div className="flex flex-wrap gap-2">
+                {["Git", "GitHub", "VS Code", "Postman"].map((skill) => (
+                  <span
+                    key={skill}
+                    className="skill-chip text-orange-800 dark:text-orange-100"
+                  >
+                    {skill}
+                  </span>
+                ))}
+              </div>
+            </div>
 
           </div>
         </div>
@@ -607,78 +765,121 @@ export default function Home() {
 
       {/* Proyectos */}
       <section id="proyectos" className="mb-20 scroll-mt-12">
-        <div className="max-w-6xl mx-auto px-6">
+        <div className="w-full max-w-6xl mx-auto px-4 sm:px-6">
           <h2 className="text-md font-semibold mb-12 mt-16 bg-gradient-to-r from-cyan-600 to-cyan-700 dark:from-blue-400 dark:to-cyan-400 bg-clip-text text-transparent tracking-widest">
             PROYECTOS
           </h2>
 
-          <div>
-            <ProjectCard 
-              title="Red Social con Symfony"
-              description="Plataforma de red social desarrollada con Symfony que incluye autenticación de usuarios, publicaciones, likes, seguidores, mensajes privados y sistema de notificaciones."
-              image="/projects/social-network-mockup.png"
-              technologies={["Symfony 7", "PHP", "MySQL", "Twig", "Bootstrap","jQuery / AJAX", "CSS"]}
-              github="https://github.com/gregoriomesafernandez-star/social-network-symfony.git"
-              demo="https://darkgray-woodpecker-887417.hostingersite.com/"
-              reverse={false}
-            />
-
-            <ProjectCard 
-              title="Plataforma de Vídeos con Laravel"
-              description="Plataforma de vídeos desarrollada con Laravel que incluye subida de vídeos, miniaturas, comentarios, búsqueda, canales de usuario y reproducción multimedia."
-              image="/projects/videos-laravel-mockup.png"
-              technologies={["Laravel", "PHP", "MySQL", "Blade", "Breeze", "Tailwind CSS", "Alpine.js"]}
-              github="https://github.com/gregoriomesafernandez-star/videos-laravel.git"
-              reverse={true}
-            />
-
-            <ProjectCard
-              title="Plataforma de Música (Angular + Node.js)"
-              description="Aplicación web de gestión y reproducción musical desarrollada con Angular y Node.js. Permite gestionar artistas, álbumes y canciones, con autenticación JWT, control de acceso basado en roles y subida de imágenes y archivos de audio. Arquitectura frontend/backend separada con una API REST y MongoDB."
-              image="/projects/musicfy-mockup-shot.png"
-              technologies={[
-                "Angular 21",
-                "TypeScript",
-                "Tailwind CSS 4",
-                "Node.js",
-                "Express",
-                "MongoDB",
-                "Mongoose",
-                "JWT",
-                "REST API",
-                "Multer"
-              ]}
-              githubFrontend="https://github.com/gregoriomesafernandez-star/musicfy-frontend"
-              githubBackend="https://github.com/gregoriomesafernandez-star/musicfy-backend"
-              reverse={false}
-            />
-
-            <ProjectCard
-              title="Sistema de Gestión de Vehículos"
-              description="Aplicación web desarrollada con Angular y Laravel que permite gestionar vehículos mediante una arquitectura frontend/backend separada. Incluye autenticación JWT, operaciones CRUD, formularios reactivos y comunicación con una API REST para la gestión de vehículos."
-              image="/projects/cars-angular-laravel-mockup.png"
-              technologies={["Angular 21", "TypeScript", "RxJS", "Tailwind CSS", "Laravel 12", "PHP", "MySQL", "JWT", "REST API", "Eloquent ORM"]}
-              githubFrontend="https://github.com/gregoriomesafernandez-star/cars-angular"
-              githubBackend="https://github.com/gregoriomesafernandez-star/cars-api-laravel"
-              reverse={true}
-            />
-
-            <ProjectCard
-              title="API de Gestión de Proyectos"
-              description="API REST desarrollada con Node.js, Express y MongoDB que incluye operaciones CRUD, gestión de imágenes con Multer y almacenamiento de datos con Mongoose."
-              image="/projects/node-mongo-mockup.png"
-              technologies={[ "Node.js", "Express", "MongoDB", "Mongoose", "Multer", "REST API"]}
-              github="https://github.com/gregoriomesafernandez-star/projects-api-node-mongodb"
-              reverse={false}
-            />
-
-          </div>
+          <ProjectsShowcase
+            projects={[
+              {
+                title: "Red Social con Symfony",
+                description:
+                  "Plataforma de red social desarrollada con Symfony que incluye autenticación de usuarios, publicaciones, likes, seguidores, mensajes privados y sistema de notificaciones.",
+                image: "/projects/social-network-mockup.png",
+                technologies: [
+                  "Symfony 7",
+                  "PHP",
+                  "MySQL",
+                  "Twig",
+                  "Bootstrap",
+                  "jQuery / AJAX",
+                  "CSS",
+                ],
+                github: "https://github.com/gregoriomesafernandez-star/social-network-symfony.git",
+                demo: "https://darkgray-woodpecker-887417.hostingersite.com/",
+                reverse: false,
+              },
+              {
+                title: "Plataforma de Vídeos con Laravel",
+                description: "Plataforma de vídeos desarrollada con Laravel que incluye subida de vídeos, miniaturas, comentarios, búsqueda, canales de usuario y reproducción multimedia.",
+                image: "/projects/videos-laravel-mockup.png",
+                technologies: [
+                  "Laravel",
+                  "PHP",
+                  "MySQL",
+                  "Blade",
+                  "Breeze",
+                  "Tailwind CSS",
+                  "Alpine.js",
+                ],
+                github: "https://github.com/gregoriomesafernandez-star/videos-laravel.git",
+                reverse: true,
+              },
+              {
+                title: "Plataforma de Música (Angular + Node.js)",
+                description:
+                  "Aplicación web de gestión y reproducción musical con Angular y Node.js. Permite administrar artistas, álbumes y canciones, con autenticación JWT, control de acceso por roles y subida de imágenes y audio. Utiliza una arquitectura frontend/backend separada, una API REST y MongoDB.",
+                image: "/projects/mockup-playmusic.png",
+                technologies: [
+                  "Angular 21",
+                  "TypeScript",
+                  "Tailwind CSS 4",
+                  "Node.js",
+                  "Express",
+                  "MongoDB",
+                  "Mongoose",
+                  "JWT",
+                  "REST API",
+                  "Multer",
+                ],
+                githubFrontend: "https://github.com/gregoriomesafernandez-star/musicfy-frontend",
+                githubBackend: "https://github.com/gregoriomesafernandez-star/musicfy-backend",
+                reverse: false,
+              },
+              { 
+                title: "PsicoCMS – Sistema de Gestión para Psicólogos", 
+                description: "Sistema de gestión para profesionales de la psicología que incluye un panel de administración para gestionar pacientes, citas, calendario y contenidos, junto con una web pública personalizable para presentar servicios profesionales y facilitar el contacto con pacientes.", 
+                image: "/projects/mockup-psicocms.png", 
+                technologies: ["PHP","Laravel","MySQL","Blade","HTML5","CSS3","JavaScript"],
+                github: "https://github.com/gregoriomesafernandez-star/PsicoCMS.git",
+                reverse: false, 
+              },
+              {
+                title: "Sistema de Gestión de Vehículos",
+                description:
+                  "Aplicación web desarrollada con Angular y Laravel que permite gestionar vehículos mediante una arquitectura frontend/backend separada. Incluye autenticación JWT, operaciones CRUD, formularios reactivos y comunicación con una API REST para la gestión de vehículos.",
+                image: "/projects/cars-angular-laravel-mockup.png",
+                technologies: [
+                  "Angular 21",
+                  "TypeScript",
+                  "RxJS",
+                  "Tailwind CSS",
+                  "Laravel 12",
+                  "PHP",
+                  "MySQL",
+                  "JWT",
+                  "REST API",
+                  "Eloquent ORM",
+                ],
+                githubFrontend: "https://github.com/gregoriomesafernandez-star/cars-angular",
+                githubBackend: "https://github.com/gregoriomesafernandez-star/cars-api-laravel",
+                reverse: true,
+              },
+              {
+                title: "API de Gestión de Proyectos",
+                description:
+                  "API REST desarrollada con Node.js, Express y MongoDB que incluye operaciones CRUD, gestión de imágenes con Multer y almacenamiento de datos con Mongoose.",
+                image: "/projects/node-mongo-mockup.png",
+                technologies: [
+                  "Node.js",
+                  "Express",
+                  "MongoDB",
+                  "Mongoose",
+                  "Multer",
+                  "REST API",
+                ],
+                github: "https://github.com/gregoriomesafernandez-star/projects-api-node-mongodb",
+                reverse: false,
+              },
+            ]}
+          />
         </div>
       </section>
 
       {/* Contacto */}
-      <section id="contacto" className="pb-24 bg-[#f2f2f0] dark:bg-[#13203e] text-white mt-24 ">
-        <div className="max-w-6xl mx-auto px-6 pt-12">
+      <section id="contacto" className="w-full min-w-0 overflow-x-clip pb-24 bg-[#f2f2f0] dark:bg-[#13203e] text-white mt-24">
+        <div className="w-full min-w-0 max-w-6xl mx-auto px-3 sm:px-6 pt-12">
 
           {/* Título */}
           <div className="mb-16">
@@ -696,13 +897,13 @@ export default function Home() {
 
           </div>
 
-          <div className="grid lg:grid-cols-2 items-stretch gap-10">
+          <div className="grid min-w-0 grid-cols-1 lg:grid-cols-2 items-stretch gap-6 lg:gap-10">
  
             {/* FORMULARIO */}
             <form
               action="https://formspree.io/f/xnjyybkz"
               method="POST"
-              className="bg-[#d5d4d3] dark:bg-[#0B1629] p-8 rounded-xl border border-blue-500/30 shadow-lg shadow-blue-500/5"
+              className="min-w-0 max-w-full box-border bg-[#d5d4d3] dark:bg-[#0B1629] p-4 sm:p-8 rounded-xl border border-blue-500/30 shadow-lg shadow-blue-500/5"
             >
 
               {/* Cabecera */}
@@ -824,14 +1025,14 @@ export default function Home() {
                     />
                   </div>
 
-                  <div>
+                  <div className="min-w-0 flex-1">
                     <p className="text-cyan-600 dark:text-blue-400 font-semibold text-sm">
                       Email
                     </p>
 
                     <a
                       href="mailto:gregorio.mesafernandez@gmail.com"
-                      className="text-slate-700 dark:text-slate-300 hover:text-slate-500 dark:hover:text-slate-500 transition"
+                      className="break-all text-slate-700 dark:text-slate-300 hover:text-slate-500 dark:hover:text-slate-500 transition"
                     >
                       gregorio.mesafernandez@gmail.com
                     </a>
@@ -849,7 +1050,7 @@ export default function Home() {
                     
                   </div>
 
-                  <div>
+                  <div className="min-w-0 flex-1">
                     <p className="text-cyan-600 dark:text-blue-400 font-semibold text-sm">
                       GitHub
                     </p>
@@ -858,7 +1059,7 @@ export default function Home() {
                       href="https://github.com/gregoriomesafernandez-star"
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="text-slate-700 dark:text-slate-300 hover:text-slate-500 dark:hover:text-slate-500 transition"
+                      className="break-all text-slate-700 dark:text-slate-300 hover:text-slate-500 dark:hover:text-slate-500 transition"
                     >
                       github.com/gregoriomesafernandez-star
                     </a>
@@ -876,7 +1077,7 @@ export default function Home() {
                     />
                   </div>
                     
-                  <div>
+                  <div className="min-w-0 flex-1">
                     <p className="text-cyan-600 dark:text-blue-400 font-semibold text-sm">
                       LinkedIn
                     </p>
@@ -885,7 +1086,7 @@ export default function Home() {
                       href="https://www.linkedin.com/in/gregorio-mesa-fernandez/"
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="text-slate-700 dark:text-slate-300 hover:text-slate-500 dark:hover:text-slate-500 transition"
+                      className="break-all text-slate-700 dark:text-slate-300 hover:text-slate-500 dark:hover:text-slate-500 transition"
                     >
                       linkedin.com/in/gregorio-mesa-fernandez/
                     </a>
@@ -903,12 +1104,12 @@ export default function Home() {
                     />
                   </div>
 
-                  <div>
+                  <div className="min-w-0 flex-1">
                     <p className="text-cyan-600 dark:text-blue-400 font-semibold text-sm">
                       Ubicación
                     </p>
 
-                    <p className="text-slate-700 dark:text-slate-300 hover:text-slate-500 dark:hover:text-slate-500">
+                    <p className="break-all text-slate-700 dark:text-slate-300 hover:text-slate-500 dark:hover:text-slate-500">
                       Tenerife, Islas Canarias, España
                     </p>
                   </div>
@@ -927,7 +1128,7 @@ export default function Home() {
       <footer className="dark:bg-slate-950 dark:text-slate-400 border-t border-slate-300 dark:border-slate-800">
         <div className="max-w-6xl mx-auto px-6 py-5">
 
-          <div className="flex flex-col md:flex-row justify-between items-center gap-6">
+          <div className="flex flex-col md:flex-row md:justify-between items-center gap-6">
 
             {/* Logo / Nombre */}
             <div>

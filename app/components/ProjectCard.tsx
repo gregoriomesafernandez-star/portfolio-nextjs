@@ -32,7 +32,7 @@ export default function ProjectCard({
 }: ProjectCardProps) {
   return (
     <article
-      className={`grid gap-10 items-center mb-52 max-
+      className={`project-enter grid gap-10 items-center
                   ${reverse ? 'lg:grid-cols-[0.8fr_1.2fr]' : 'lg:grid-cols-[1.2fr_0.8fr]'}
       `}>
 
