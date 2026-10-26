@@ -403,7 +403,7 @@ export default function Home() {
               <a
                 href="/Gregorio-Mesa-CV.pdf"
                 download
-                className="w-[40%] bg-cyan-600 dark:bg-blue-600 text-center px-5 py-3 mx-auto rounded-lg font-medium hover:bg-cyan-500 dark:hover:bg-blue-400 transition-colors"
+                className="w-[50%] bg-cyan-600 dark:bg-blue-600 text-center px-5 py-3 mx-auto rounded-lg font-medium hover:bg-cyan-500 dark:hover:bg-blue-400 transition-colors"
               >
                 Descargar CV
               </a>
